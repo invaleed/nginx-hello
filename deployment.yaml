@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+name: hello
+labels:
+  app: hello
+spec:
+strategy:
+  type: Recreate
+template:
+  metadata:
+    labels:
+      app: hello
+      tier: hello
+  spec:
+    containers:
+    - name: hello
+      image: 192.168.65.141/nginx-hello:latest
+      imagePullPolicy: Always
+      ports:
+      - containerPort: 80
+        name: hello
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+name: hello
+labels:
+  app: hello
+spec:
+ports:
+  - port: 80
+    targetPort: 80
+selector:
+  app: hello
+  tier: hello
+type: LoadBalancer
