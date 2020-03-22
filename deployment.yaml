@@ -1,38 +1,40 @@
-apiVersion: extensions/v1beta1
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: hello
-labels:
-  app: hello
+  name: nginx-hello
+  labels:
+    app: nginx-hello
 spec:
-strategy:
-  type: Recreate
-template:
-  metadata:
-    labels:
-      app: hello
-      tier: hello
-  spec:
-    containers:
-    - name: hello
-      image: 192.168.65.141/nginx-hello:latest
-      imagePullPolicy: Always
-      ports:
-      - containerPort: 80
-        name: hello
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-hello
+  template:
+    metadata:
+      labels:
+        app: nginx-hello
+    spec:
+      imagePullSecrets:
+      - name: harbor
+      containers:
+        - name: nginx-hello
+          image: 192.168.65.141/ramadoni/nginx-hello:latest
+          ports:
+            - containerPort: 80
 
 ---
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-name: hello
-labels:
-  app: hello
+  name: nginx-hello
+  labels:
+    app: nginx-hello
 spec:
-ports:
-  - port: 80
-    targetPort: 80
-selector:
-  app: hello
-  tier: hello
-type: LoadBalancer
+  selector:
+    app: nginx-hello
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
