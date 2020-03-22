@@ -13,14 +13,14 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    myapp = docker.build("${project}/hello-nginx:${env.BUILD_ID}")
+                    myapp = docker.build("${PROJECT_ID}/nginx-hello:${env.BUILD_ID}")
                 }
             }
         }
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://192.168.65.141/harbor/projects/2', 'harbor') {
+                    docker.withRegistry('https://192.168.65.141/ramadoni', 'harbor') {
                             myapp.push("latest")
                             myapp.push("${env.BUILD_ID}")
                     }
@@ -29,7 +29,7 @@ pipeline {
         }        
         stage('Deploy to Kubernetes') {
             steps{
-                sh "sed -i 's/hello:latest/hello:${env.BUILD_ID}/g' deployment.yaml"
+                sh "sed -i 's/nginx-hello:latest/nginx-hello:${env.BUILD_ID}/g' deployment.yaml"
                 sh 'kubectl apply -f ./deployment.yml'
             }
         }
