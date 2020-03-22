@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps{
                 sh "sed -i 's/nginx-hello:latest/nginx-hello:${env.BUILD_ID}/g' deployment.yaml"
-                sh 'kubectl apply -f ./deployment.yml'
+                sh 'kubectl apply -f ./deployment.yaml'
             }
         }
     }    
