@@ -17,9 +17,9 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'dev') {
-                        app = docker.build("${project}/${appName}-dev")
+                        app = docker.build("${PROJECT_ID}/${APP_NAME}-dev")
                     } else {
-                        app = docker.build("${project}/${appName}-prod")
+                        app = docker.build("${PROJECT_ID}/${APP_NAME}-prod")
                     }
                 }
             }
