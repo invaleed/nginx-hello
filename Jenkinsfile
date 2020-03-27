@@ -9,9 +9,9 @@ node {
 
     stage('Build Docker Image') {
       if (env.BRANCH_NAME == 'origin/dev') {
-        app = docker.build("${project}/$project-dev-${appName}")
+        app = docker.build("${project}/${appName}-dev")
       } else {
-        app = docker.build("${project}/$project-prod-${appName}")
+        app = docker.build("${project}/${appName}-prod")
       }
     }
 
@@ -30,11 +30,11 @@ node {
 
     stage('Deploy to Kubernetes') {
       if (env.BRANCH_NAME == 'origin/dev') {
-          sh "sed -i 's/nginx-hello:latest/nginx-hello:${env.BUILD_NUMBER}/g' deployment.yaml"
-          sh 'kubectl apply -f ./deployment.yaml -n dev'
+          sh "sed -i 's/${appName}:latest/${appName}-dev:${env.BUILD_NUMBER}/g' deployment.yaml"
+          sh 'kubectl apply -f ./deployment.yml -n dev'
       } else {
-          sh "sed -i 's/nginx-hello:latest/nginx-hello:${env.BUILD_NUMBER}/g' deployment.yaml"
-          sh 'kubectl apply -f ./deployment.yaml -n prod'
+          sh "sed -i 's/${appName}:latest/${appName}-prod:${env.BUILD_NUMBER}/g' deployment.yaml"
+          sh 'kubectl apply -f ./deployment.yml -n prod'
       }
     }
 
@@ -43,3 +43,4 @@ node {
           // sh 'docker system prune -a -f'
     }
 }
+
