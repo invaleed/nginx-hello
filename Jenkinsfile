@@ -31,10 +31,10 @@ node {
     stage('Deploy to Kubernetes') {
       if (env.BRANCH_NAME == 'origin/dev') {
           sh "sed -i 's/${appName}:latest/${appName}-dev:${env.BUILD_NUMBER}/g' deployment.yaml"
-          sh 'kubectl apply -f ./deployment.yml -n dev'
+          sh 'kubectl apply -f ./deployment.yaml -n dev'
       } else {
           sh "sed -i 's/${appName}:latest/${appName}-prod:${env.BUILD_NUMBER}/g' deployment.yaml"
-          sh 'kubectl apply -f ./deployment.yml -n prod'
+          sh 'kubectl apply -f ./deployment.yaml -n prod'
       }
     }
 
