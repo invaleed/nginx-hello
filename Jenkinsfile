@@ -8,7 +8,7 @@ node {
     }
 
     stage('Build Docker Image') {
-      if (env.BRANCH_NAME == 'origin/dev') {
+      if (env.BRANCH_NAME == 'dev') {
         app = docker.build("${project}/${appName}-dev")
       } else {
         app = docker.build("${project}/${appName}-prod")
@@ -29,7 +29,7 @@ node {
     }
 
     stage('Deploy to Kubernetes') {
-      if (env.BRANCH_NAME == 'origin/dev') {
+      if (env.BRANCH_NAME == 'dev') {
           sh "sed -i 's/${appName}:latest/${appName}-dev:${env.BUILD_NUMBER}/g' deployment.yaml"
           sh 'kubectl apply -f ./deployment.yaml -n dev'
       } else {
