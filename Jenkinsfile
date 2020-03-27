@@ -13,7 +13,11 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    myapp = docker.build("${PROJECT_ID}/nginx-hello:${env.BUILD_ID}")
+                    if (env.TAG == 'origin/dev') {
+                        myapp = docker.build("${PROJECT_ID}/nginx-hello-dev:${env.BUILD_ID}")
+                        } else {
+                        myapp = docker.build("${PROJECT_ID}/nginx-hello-prod:${env.BUILD_ID}")
+                    }
                 }
             }
         }
@@ -26,18 +30,23 @@ pipeline {
                     }
                 }
             }
-        }        
+        }
         stage('Deploy to Kubernetes') {
             steps{
-                sh "sed -i 's/nginx-hello:latest/nginx-hello:${env.BUILD_ID}/g' deployment.yaml"
-                sh 'kubectl apply -f ./deployment.yaml'
+                if (env.TAG == 'origin/dev') {
+                    sh "sed -i 's/nginx-hello:latest/nginx-hello-dev:${env.BUILD_ID}/g' deployment.yaml"
+                    sh 'kubectl apply -f ./deployment.yaml -n dev'
+                } else {
+                    sh "sed -i 's/nginx-hello:latest/nginx-hello-prod:${env.BUILD_ID}/g' deployment.yaml"
+                    sh 'kubectl apply -f ./deployment.yaml -n prod'
+                }                   
             }
         }
         stage('Remove Unused docker image') {
             steps{
-                sh "docker rmi ${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
-		sh "docker rmi 192.168.65.141/${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
+                // sh "docker rmi ${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
+                // sh "docker rmi 192.168.65.141/${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
             }
-	}
-    }    
+        }
+    }
 }
