@@ -13,7 +13,7 @@ pipeline {
             }
         }
 
-        stage("Build image") {
+        stage("Build Docker Image") {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'dev') {
