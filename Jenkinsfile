@@ -33,5 +33,10 @@ pipeline {
                 sh 'kubectl apply -f ./deployment.yaml'
             }
         }
+        stage('Remove Unused docker image') {
+            steps{
+                sh "docker rmi $registry:$BUILD_NUMBER"
+            }
+	}
     }    
 }
