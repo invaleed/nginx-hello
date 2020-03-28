@@ -32,18 +32,20 @@ pipeline {
             }
         }
         stage('Deploy to Kubernetes') {
-            steps{
-                if (env.BRANCH_NAME == 'origin/dev') {
-                    sh "sed -i 's/nginx-hello:latest/nginx-hello-dev:${env.BUILD_ID}/g' deployment.yaml"
-                    sh 'kubectl apply -f ./deployment.yaml -n dev'
-                } else {
-                    sh "sed -i 's/nginx-hello:latest/nginx-hello-prod:${env.BUILD_ID}/g' deployment.yaml"
-                    sh 'kubectl apply -f ./deployment.yaml -n prod'
+            steps {
+                script {
+                    if (env.BRANCH_NAME == 'origin/dev') {
+                        sh "sed -i 's/nginx-hello:latest/nginx-hello-dev:${env.BUILD_ID}/g' deployment.yaml"
+                        sh 'kubectl apply -f ./deployment.yaml -n dev'
+                    } else {
+                        sh "sed -i 's/nginx-hello:latest/nginx-hello-prod:${env.BUILD_ID}/g' deployment.yaml"
+                        sh 'kubectl apply -f ./deployment.yaml -n prod'
+                    }
                 }                   
             }
         }
         stage('Remove Unused docker image') {
-            steps{
+            steps {
                 // sh "docker rmi ${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
                 // sh "docker rmi 192.168.65.141/${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
             }
