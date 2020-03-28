@@ -47,7 +47,8 @@ pipeline {
         stage('Remove Unused docker image') {
             steps {
                 script {
-                    sh "docker rmi ${PROJECT_ID}/${APP_NAME}-dev:${env.BUILD_ID}"
+		    sh "echo 'done'"
+                    //sh "docker rmi ${PROJECT_ID}/${APP_NAME}-*:${env.BUILD_ID}"
                 }
             }
         }
