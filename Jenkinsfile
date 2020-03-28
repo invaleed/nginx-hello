@@ -1,28 +1,18 @@
-pipeline {
-    agent any
+node {
+    def app
+    def project = 'ramadoni'
+    def appName = 'nginx-hello'
 
-    environment {
-        PROJECT_ID = 'ramadoni'
-        APP_NAME = 'nginx-hello'
+    stage('Clone repository') {
+      checkout scm
     }
 
-    stages {
-        stage("Checkout code") {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage("Build Docker Image") {
-            steps {
-                script {
-                    if (env.BRANCH_NAME == 'origin/dev') {
-                        echo 'I only execute on the dev branch' 
-                    } else {
-                        echo 'I execute on the master branch'
-                    }
-                }
-            }
-        }
-    }    
+    stage('Build Docker Image') {
+      echo env.BRANCH_NAME
+      if (env.BRANCH_NAME == 'dev') {
+        echo "this is dev branch"
+      } else {
+        echo "this is master branch"
+      }
+    }
 }
