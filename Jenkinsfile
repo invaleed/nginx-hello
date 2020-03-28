@@ -47,8 +47,7 @@ pipeline {
         stage('Remove Unused docker image') {
             steps {
                 script {
-                    sh "docker rmi ${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
-                    sh "docker rmi 192.168.65.141/${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
+                    sh 'docker system prune -a -f'
                 }
             }
         }
