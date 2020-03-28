@@ -1,5 +1,5 @@
 stage 'Init'
 node {
   checkout scm
-  sh 'echo $BRANCH_NAME'
+  sh "echo '${BRANCH_NAME}'"
 }
