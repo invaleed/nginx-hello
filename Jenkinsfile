@@ -16,10 +16,10 @@ pipeline {
         stage("Build Docker Image") {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'dev') {
-                        echo 'I only execute on the master branch' 
+                    if (env.BRANCH_NAME == 'origin/dev') {
+                        echo 'I only execute on the dev branch' 
                     } else {
-                        echo 'I execute elsewhere'
+                        echo 'I execute on the master branch'
                     }
                 }
             }
