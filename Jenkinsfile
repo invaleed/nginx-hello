@@ -46,8 +46,10 @@ pipeline {
         }
         stage('Remove Unused docker image') {
             steps {
-                // sh "docker rmi ${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
-                // sh "docker rmi 192.168.65.141/${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
+                script {
+                    // sh "docker rmi ${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
+                    // sh "docker rmi 192.168.65.141/${PROJECT_ID}/nginx-hello:${env.BUILD_ID}"
+                }
             }
         }
     }
