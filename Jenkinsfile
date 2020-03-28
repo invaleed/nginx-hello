@@ -17,9 +17,9 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'dev') {
-                        app = docker.build("${PROJECT_ID}/${APP_NAME}-dev")
+                        echo 'I only execute on the master branch' 
                     } else {
-                        app = docker.build("${PROJECT_ID}/${APP_NAME}-prod")
+                        echo 'I execute elsewhere'
                     }
                 }
             }
