@@ -24,7 +24,7 @@ pipeline {
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://192.168.65.141/ramadoni', 'harbor') {
+                    docker.withRegistry('https://docker.adzkia.web.id/ramadoni', 'harbor') {
                             myapp.push("latest")
                             myapp.push("${env.BUILD_ID}")
                     }
