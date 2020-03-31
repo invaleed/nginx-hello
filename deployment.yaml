@@ -20,6 +20,7 @@ spec:
       containers:
         - name: nginx-hello
           image: docker.adzkia.web.id/ramadoni/nginx-hello:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
 
