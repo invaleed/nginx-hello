@@ -25,11 +25,13 @@ pipeline {
             }
         }
 
-        stage('Clone Repository') {
+        stage('Push Images') {
             steps {
-                docker.withRegistry('https://docker.adzkia.web.id/ramadoni', 'harbor') {
-                    app.push("${env.BUILD_NUMBER}")
-                    app.push("latest")
+                script {
+                    docker.withRegistry('https://docker.adzkia.web.id/ramadoni', 'harbor') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                    }
                 }
             }
         }
