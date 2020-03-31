@@ -1,54 +1,49 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'ramadoni'
-        APP_NAME = 'nginx-hello'
+        project_id = 'ramadoni'
+        app_name = 'nginx-hello'
     }
+
     stages {
-        stage("Checkout code") {
+
+        stage('Clone Repository') {
             steps {
                 checkout scm
             }
         }
-        stage("Build image") {
+
+        stage('Build Docker Images') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'origin/dev') {
-                        myapp = docker.build("${PROJECT_ID}/${APP_NAME}-dev:${env.BUILD_ID}")
-                        } else {
-                        myapp = docker.build("${PROJECT_ID}/${APP_NAME}-prod:${env.BUILD_ID}")
-                    }
-                }
-            }
-        }
-        stage("Push image") {
-            steps {
-                script {
-                    docker.withRegistry('https://docker.adzkia.web.id/ramadoni', 'harbor') {
-                            myapp.push("latest")
-                            myapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    if (env.BRANCH_NAME == 'origin/dev') {
-                        sh "sed -i 's/nginx-hello:latest/${APP_NAME}-dev:${env.BUILD_ID}/g' deployment.yaml"
-                        sh 'kubectl apply -f ./deployment.yaml -n dev'
+                    if (env.BRANCH_NAME == 'master') {
+                        sh "docker build -t ${app_name}-prod:${env.BUILD_NUMBER}"
                     } else {
-                        sh "sed -i 's/nginx-hello:latest/${APP_NAME}-prod:${env.BUILD_ID}/g' deployment.yaml"
-                        sh 'kubectl apply -f ./deployment.yaml -n prod'
+                        sh "docker build -t ${app_name}-dev:${env.BUILD_NUMBER}"
                     }
-                }                   
+                }
             }
         }
-        stage('Remove Unused docker image') {
+
+        stage('Clone Repository') {
+            steps {
+                docker.withRegistry('https://docker.adzkia.web.id/ramadoni', 'harbor') {
+                    app.push("${env.BUILD_NUMBER}")
+                    app.push("latest")
+                }
+            }
+        }
+
+        stage('Deploy to K8s') {
             steps {
                 script {
-		    sh "echo 'done'"
-                    //sh "docker rmi ${PROJECT_ID}/${APP_NAME}-*:${env.BUILD_ID}"
+                    if (env.BRANCH_NAME == 'master') {
+                        sh "sed -i 's/${app_name}:latest/${app_name}-prod:${env.BUILD_NUMBER}/g' deployment.yaml"
+                        sh 'kubectl apply -f ./deployment.yaml -n prod'
+                    } else {
+                        sh "sed -i 's/${app_name}:latest/${app_name}-dev:${env.BUILD_NUMBER}/g' deployment.yaml"
+                        sh 'kubectl apply -f ./deployment.yaml -n dev'
+                    }
                 }
             }
         }
