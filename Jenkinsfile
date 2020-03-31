@@ -17,9 +17,9 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'master') {
-                        sh "docker build -t ${project_id}/${app_name}-prod:${env.BUILD_NUMBER} ."
+                        myapp = docker.build("${project_id}/${app_name}-prod:${env.BUILD_NUMBER}")
                     } else {
-                        sh "docker build -t ${project_id}/${app_name}-dev:${env.BUILD_NUMBER} ."
+                        myapp = docker.build("${project_id}/${app_name}-dev:${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -29,8 +29,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://docker.adzkia.web.id/ramadoni', 'harbor') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
+                        myapp.push("${env.BUILD_NUMBER}")
+                        myapp.push("latest")
                     }
                 }
             }
