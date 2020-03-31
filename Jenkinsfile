@@ -17,9 +17,9 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'master') {
-                        sh "docker build -t ${app_name}-prod:${env.BUILD_NUMBER}"
+                        sh "docker build -t ${app_name}-prod:${env.BUILD_NUMBER} ."
                     } else {
-                        sh "docker build -t ${app_name}-dev:${env.BUILD_NUMBER}"
+                        sh "docker build -t ${app_name}-dev:${env.BUILD_NUMBER} ."
                     }
                 }
             }
