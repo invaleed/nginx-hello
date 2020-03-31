@@ -16,7 +16,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'origin/master') {
+                    if (env.BRANCH_NAME == 'master') {
                         myapp = docker.build("${project_id}/${app_name}-prod:${env.BUILD_NUMBER}")
                     } else {
                         myapp = docker.build("${project_id}/${app_name}-dev:${env.BUILD_NUMBER}")
@@ -39,7 +39,7 @@ pipeline {
         stage('Deploy to K8s') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'origin/master') {
+                    if (env.BRANCH_NAME == 'master') {
                         sh "sed -i 's/${app_name}:latest/${app_name}-prod:${env.BUILD_NUMBER}/g' deployment.yaml"
                         sh 'kubectl apply -f ./deployment.yaml -n prod'
                     } else {
