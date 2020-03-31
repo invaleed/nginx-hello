@@ -19,7 +19,7 @@ spec:
       - name: harbor
       containers:
         - name: nginx-hello
-          image: 192.168.65.141/ramadoni/nginx-hello:latest
+          image: https://docker.adzkia.web.id/ramadoni/nginx-hello:latest
           ports:
             - containerPort: 80
 
