@@ -16,7 +16,7 @@ labels:
 spec:
   containers:
   - name: docker
-    image: docker:latest
+    image: docker:19.03.8-dind
     command:
     - cat
     tty: true
