@@ -37,7 +37,8 @@ spec:
 	stage('Build Docker Images') {
 	  steps {
 		script {
-		  myapp = docker.build("${imageTag}")
+		  def customImage = docker.build("${imageTag}")
+                  customImage.push()
 		}
 	  }
 	}
