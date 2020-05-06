@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // docker.withRegistry('http://192.168.65.180:5000', 'harbor') {
-					// docker.withRegistry('http://192.168.65.180:5000') {
+			docker.withRegistry('http://192.168.65.180:5000') {
                         myapp.push("${imageTag}")
                         myapp.push("latest")
                     }
