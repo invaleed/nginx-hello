@@ -29,6 +29,7 @@ spec:
 }
   }
 	stages {
+	
 	stage('Clone Repository') {
 	  steps {
 		checkout scm
@@ -45,7 +46,6 @@ spec:
 	  steps {
 		container('docker') {
 		  sh "docker push ${imageTag}"
-		  }
 		}
 	  }
 	}
