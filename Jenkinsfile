@@ -37,7 +37,7 @@ spec:
 	stage('Build Docker Images') {
 	  steps {
 	          container('docker') {	
-		    sh "docker build -t ('${imageTag}') ."
+		    sh "docker build -t ${imageTag} ."
 		}
 	  }
 	}
