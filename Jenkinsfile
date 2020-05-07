@@ -59,7 +59,7 @@ spec:
 		  sh("sed -i.bak 's#docker.adzkia.web.id/ramadoni/nginx-hello:latest#${imageTag}#' ./k8s/canary/*.yaml")
 		  sh("kubectl --namespace=production apply -f k8s/services/")
 		  sh("kubectl --namespace=production apply -f k8s/canary/")
-		  sh("echo http://`kubectl --namespace=production get service/${feSvcName} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'` > ${feSvcName}")
+		  sh("echo http://`kubectl --namespace=production get service/${appName} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'` > ${appName}")
 		} 
 	  }
 	}
@@ -72,7 +72,7 @@ spec:
 		  sh("sed -i.bak 's#docker.adzkia.web.id/ramadoni/nginx-hello:latest#${imageTag}#' ./k8s/production/*.yaml")
 		  sh("kubectl --namespace=production apply -f k8s/services/")
 		  sh("kubectl --namespace=production apply -f k8s/production/")
-		  sh("echo http://`kubectl --namespace=production get service/${feSvcName} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'` > ${feSvcName}")
+		  sh("echo http://`kubectl --namespace=production get service/${appName} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'` > ${appName}")
 		}
 	  }
 	}
@@ -92,7 +92,7 @@ spec:
 		  sh("kubectl --namespace=${env.BRANCH_NAME} apply -f k8s/services/")
 		  sh("kubectl --namespace=${env.BRANCH_NAME} apply -f k8s/dev/")
 		  echo 'To access your environment run `kubectl proxy`'
-		  echo "Then access your service via http://localhost:8001/api/v1/proxy/namespaces/${env.BRANCH_NAME}/services/${feSvcName}:80/"
+		  echo "Then access your service via http://localhost:8001/api/v1/proxy/namespaces/${env.BRANCH_NAME}/services/${appName}:80/"
 		}
 	  }     
 	}
