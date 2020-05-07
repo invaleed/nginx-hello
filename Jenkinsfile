@@ -20,6 +20,7 @@ spec:
     securityContext:
       privileged: true    
     tty: true
+    command: ["dockerd-entrypoint.sh", "--insecure-registry=192.168.65.180:5000"]
   - name: kubectl
     image: gcr.io/cloud-builders/kubectl
     command:
