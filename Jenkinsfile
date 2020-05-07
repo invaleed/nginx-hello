@@ -16,9 +16,9 @@ labels:
 spec:
   containers:
   - name: docker
-    image: gcr.io/cloud-builders/gcloud
-    command:
-    - cat
+    image: docker:dind
+    securityContext:
+      privileged: true    
     tty: true
   - name: kubectl
     image: gcr.io/cloud-builders/kubectl
