@@ -14,7 +14,6 @@ metadata:
 labels:
   component: ci
 spec:
-  serviceAccountName: production
   containers:
   - name: docker
     image: docker:dind
