@@ -87,7 +87,7 @@ spec:
 		  // Create namespace if it doesn't exist
 		  sh("kubectl get ns ${env.BRANCH_NAME} || kubectl create ns ${env.BRANCH_NAME}")
 		  // Don't use public load balancing for development branches
-		  sh("sed -i.bak 's#LoadBalancer#ClusterIP#' ./k8s/services/hello-dev.yaml")
+		  sh("sed -i.bak 's#LoadBalancer#ClusterIP#' ./k8s/services/service.yaml")
 		  sh("sed -i.bak 's#docker.adzkia.web.id/ramadoni/nginx-hello:latest#${imageTag}#' ./k8s/dev/*.yaml")
 		  sh("kubectl --namespace=${env.BRANCH_NAME} apply -f k8s/services/")
 		  sh("kubectl --namespace=${env.BRANCH_NAME} apply -f k8s/dev/")
