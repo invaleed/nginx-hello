@@ -16,11 +16,10 @@ labels:
 spec:
   containers:
   - name: docker
-    image: docker:19.03.8-dind
+    image: docker:dind
     command:
-    - cat
+    - 'dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay'
     tty: true
-    securityContext:
     privileged: true
   - name: kubectl
     image: gcr.io/cloud-builders/kubectl
