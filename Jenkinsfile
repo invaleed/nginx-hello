@@ -14,6 +14,7 @@ metadata:
 labels:
   component: ci
 spec:
+  serviceAccountName: cd-jenkins
   containers:
   - name: docker
     image: docker:dind
