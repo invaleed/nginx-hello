@@ -20,6 +20,8 @@ spec:
     command:
     - cat
     tty: true
+    securityContext:
+    privileged: true
   - name: kubectl
     image: gcr.io/cloud-builders/kubectl
     command:
