@@ -36,17 +36,15 @@ spec:
 	}
 	stage('Build Docker Images') {
 	  steps {
-	          container('docker') {	
-		    sh "docker build -t ${imageTag} ."
+	        container('docker') {	
+		  sh "docker build -t ${imageTag} ."
 		}
 	  }
 	}
 	stage('Push Images') {
 	  steps {
-		script {
-		  docker.withRegistry('http://192.168.65.180:5000') {
-		  myapp.push("${imageTag}")
-		  myapp.push("latest")
+		container('docker') {
+		  sh "docker push ${imageTag}"
 		  }
 		}
 	  }
