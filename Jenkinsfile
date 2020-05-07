@@ -55,11 +55,13 @@ spec:
 	  when { branch 'canary' }
 	  steps {
 		container('kubectl') {
+                  // Create namespace if it doesn't exist
+                  sh("kubectl get ns ${env.BRANCH_NAME} || kubectl create ns ${env.BRANCH_NAME}")
 		  // Change deployed image in canary to the one we just built
 		  sh("sed -i.bak 's#docker.adzkia.web.id/ramadoni/nginx-hello:latest#${imageTag}#' ./k8s/canary/*.yaml")
-		  sh("kubectl --namespace=production apply -f k8s/services/")
-		  sh("kubectl --namespace=production apply -f k8s/canary/")
-		  sh("echo http://`kubectl --namespace=production get service/${appName} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'` > ${appName}")
+		  sh("kubectl --namespace=canary apply -f k8s/services/")
+		  sh("kubectl --namespace=canary apply -f k8s/canary/")
+		  sh("echo http://`kubectl --namespace=canary get service/${appName} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'` > ${appName}")
 		} 
 	  }
 	}
