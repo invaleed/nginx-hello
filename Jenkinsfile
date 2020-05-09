@@ -1,6 +1,6 @@
-def project = 'research'
+def project = 'demo'
 def appName = 'nginx-hello'
-def imageTag = "192.168.65.180:5000/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
+def imageTag = "harbor.ict.prod/${project}/${appName}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
 
 pipeline {
   agent {
@@ -20,7 +20,7 @@ spec:
     securityContext:
       privileged: true    
     tty: true
-    command: ["dockerd-entrypoint.sh", "--insecure-registry=192.168.65.180:5000"]
+    command: ["dockerd-entrypoint.sh", "--insecure-registry=harbor.ict.prod"]
   - name: kubectl
     image: gcr.io/cloud-builders/kubectl
     command:
@@ -98,5 +98,5 @@ spec:
 		}
 	  }     
 	}
-	}
+     }
 }
