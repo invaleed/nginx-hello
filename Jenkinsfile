@@ -46,7 +46,7 @@ spec:
 	stage('Push Images') {
 	  steps {
 		container('docker') {
-		  sh "docker login -u devops -p P@ssw0rd https://harbor.ict.prod"
+		  sh "docker login -u $USER_HARBOR -p $PASS_HARBOR https://harbor.ict.prod"
 		  sh "docker push ${imageTag}"
 		}
 	  }
